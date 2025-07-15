@@ -1,31 +1,30 @@
-import './pages/index.css';
-import { initialCards } from './components/cards.js';
-import { createCard, createCardList } from './components/card.js';
-import { openPopup, closePopup } from  './components/modal.js';
-import { removeCard, likeCard } from './components/card.js';
+import "./pages/index.css";
+import { initialCards } from "./components/cards.js";
+import { createCard, createCardList } from "./components/card.js";
+import { openPopup, closePopup } from "./components/modal.js";
+import { removeCard, likeCard } from "./components/card.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-    
- const cardsDOMContainer = document.querySelector('.places__list');
- const templateRoot = document.querySelector('#card-template');
- const templateCardNode = templateRoot.content.querySelector('.card');
- const cardNodes = createCardList(
- initialCards,
- templateCardNode,
- removeCard,
- likeCard, 
- openImagePopup
- );
- cardsDOMContainer.append(...cardNodes);
- });
- 
+const cardsDOMContainer = document.querySelector(".places__list");
+const templateRoot = document.querySelector("#card-template");
+const templateCardNode = templateRoot.content.querySelector(".card");
+const cardNodes = createCardList(
+  initialCards,
+  templateCardNode,
+  removeCard,
+  likeCard,
+  openImagePopup
+);
+cardsDOMContainer.append(...cardNodes);
+
 const editPopup = document.querySelector(".popup_type_edit");
 const editButton = document.querySelector(".profile__edit-button");
 const formEditProfile = document.querySelector('form[name="edit-profile"]');
 const profileTitle = document.querySelector(".profile__title");
 const profileDescription = document.querySelector(".profile__description");
 const nameInput = formEditProfile.querySelector('input[name="name"]');
-const descriptionInput = formEditProfile.querySelector('input[name="description"]');
+const descriptionInput = formEditProfile.querySelector(
+  'input[name="description"]'
+);
 const addButton = document.querySelector(".profile__add-button");
 const addCardPopup = document.querySelector(".popup_type_new-card");
 const formNewPlace = document.querySelector('form[name="new-place"]');
@@ -44,30 +43,32 @@ function openImagePopup({ link, name }) {
 }
 
 function editProfileFormSubmit(evt) {
-  evt.preventDefault(); 
+  evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = descriptionInput.value;
   closePopup(editPopup);
 }
 
-function editFormSubmit(evt) {
-  evt.preventDefault(); 
- 
+function newCardFormSubmit(evt) {
+  evt.preventDefault();
+
   const name = placeNameInput.value;
   const link = placeLinkInput.value;
-  const newCard = createCard (
-    {name, link},
-    templateCardNode
+  const newCard = createCard(
+    { name, link },
+    templateCardNode,
+    removeCard,
+    likeCard
   );
- 
+
   cardsDOMContainer.prepend(newCard);
-  
+
   closePopup(addCardPopup);
   formNewPlace.reset();
 }
 
 formEditProfile.addEventListener("submit", editProfileFormSubmit);
-formNewPlace.addEventListener("submit", editFormSubmit);
+formNewPlace.addEventListener("submit", newCardFormSubmit);
 
 editButton.addEventListener("click", () => {
   nameInput.value = profileTitle.textContent;
@@ -76,7 +77,7 @@ editButton.addEventListener("click", () => {
 });
 
 addButton.addEventListener("click", () => openPopup(addCardPopup));
-  popups.forEach((popup) => {
+popups.forEach((popup) => {
   const closeButton = popup.querySelector(".popup__close");
   closeButton.addEventListener("click", () => closePopup(popup));
   popup.addEventListener("mousedown", (evt) => {
