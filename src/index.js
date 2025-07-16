@@ -58,7 +58,8 @@ function newCardFormSubmit(evt) {
     { name, link },
     templateCardNode,
     removeCard,
-    likeCard
+    likeCard,
+    openImagePopup
   );
 
   cardsDOMContainer.prepend(newCard);
