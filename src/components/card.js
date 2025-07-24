@@ -3,23 +3,40 @@ export const createCard = (
   template,
   removeCard,
   likeCard,
-  openImagePopup
+  openImagePopup,
+  currentUserId
 ) => {
   const clonedTemplate = template.cloneNode(true);
   const cardImage = clonedTemplate.querySelector(".card__image");
+  const likeButton = clonedTemplate.querySelector(".card__like-button");
+  const deleteButton = clonedTemplate.querySelector(".card__delete-button");
+  const cardTitle = clonedTemplate.querySelector('.card__title');
+  const likeCounter = clonedTemplate.querySelector('.card__like-count');
+
   cardImage.src = cardData.link;
   cardImage.alt = cardData.name;
+  cardTitle.textContent = cardData.name;
+  likeCounter.textContent = cardData.likes.length;
 
-  clonedTemplate.querySelector(".card__title").textContent = cardData.name;
 
-  const deleteButton = clonedTemplate.querySelector(".card__delete-button");
-  deleteButton.addEventListener("click", removeCard);
+  if (cardData.likes.some((user) => user._id === currentUserId)) {
+    likeButton.classList.add("card__like-button_active");
+  }
 
-  const likeButton = clonedTemplate.querySelector(".card__like-button");
-  likeButton.addEventListener("click", likeCard);
+  if (cardData.owner._id !== currentUserId) {
+    deleteButton.remove();
+  } else {
+    deleteButton.addEventListener("click", () =>
+      removeCard(cardData._id, clonedTemplate)
+    );
+  }
+  likeButton.addEventListener("click", () =>
+    likeCard(cardData, likeButton, likeCounter)
+  );
 
-  cardImage.addEventListener("click", () => openImagePopup(cardData));
-
+  cardImage.addEventListener("click", () =>
+    openImagePopup({ link: cardData.link, name: cardData.name })
+  );
   return clonedTemplate;
 };
 
@@ -29,18 +46,8 @@ export const createCardList = (
   removeCard,
   likeCard,
   openImagePopup
-) =>
-  data.map((cardData) =>
+) => {
+  return data.map((cardData) =>
     createCard(cardData, template, removeCard, likeCard, openImagePopup)
   );
-
-export function likeCard(evt) {
-  evt.target.classList.toggle("card__like-button_is-active");
-}
-
-export function removeCard(evt) {
-  const cardElement = evt.target.closest(".card");
-  if (cardElement) {
-    cardElement.remove();
-  }
-}
+};

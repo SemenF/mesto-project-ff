@@ -1,0 +1,13 @@
+.card__like-count {
+  font-family: Inter, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: normal;
+  flex-shrink: 0;
+  width: 10px;
+  height: 13px;
+  margin-top: 3px;
+  text-align: center;
+  color: #000;
+}

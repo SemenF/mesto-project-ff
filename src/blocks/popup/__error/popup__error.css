@@ -1,0 +1,27 @@
+.popup__error {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  margin-top: 5px;
+  color: #ff0000;
+  font-size: 12px;
+  line-height: 15px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: normal;
+  overflow-wrap: break-word;
+  width: 100%;
+  max-width: 358px;
+  z-index: 50;
+}
+
+.popup__error_visible {
+  opacity: 1;
+}
+.popup__input_type_error {
+  border-bottom-color: #ff0000;
+}
+
+.popup__input:focus {
+  z-index: 38;
+}
