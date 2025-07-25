@@ -1,6 +1,6 @@
 import "./pages/index.css";
 // import { initialCards } from "./components/cards.js";
-import { createCard, createCardList } from "./components/card.js";
+import { createCard, likeButtonClick, removeCard } from "./components/card.js";
 import { openPopup, closePopup } from "./components/modal.js";
 import { clearValidation, enableValidation } from "./components/validation.js";
 import {
@@ -8,9 +8,6 @@ import {
   getInitialCards,
   changeProfileInfo,
   addNewCard,
-  deleteCard,
-  likeCard,
-  removeLike,
   changeProfileImage,
 } from "./components/api.js";
 
@@ -49,6 +46,17 @@ const formValidationConfig = {
   inputErrorClass: "popup__input_type_error",
   errorClass: "popup__error_visible",
 };
+const createCardList = (
+  data,
+  template,
+  removeCard,
+  likeCard,
+  openImagePopup
+) => {
+  return data.map((cardData) =>
+    createCard(cardData, template, removeCard, likeCard, openImagePopup)
+  );
+};
 
 enableValidation(formValidationConfig);
 
@@ -77,7 +85,7 @@ avatarForm.addEventListener ("submit", editProfileAvatarSubmit);
 avatarEditButton.addEventListener ("click", () => {
   avatarForm.reset ();
   clearValidation (avatarForm, formValidationConfig);
-  openPopup(addCardPopup);
+  openPopup(avatarPopup);
 });
 
 
@@ -108,30 +116,6 @@ function editProfileFormSubmit(evt) {
     })
     .finally(() => {
       renderLoading(false, submitButton, originalButtonText);
-    });
-}
-
-function likeButtonClick(cardData, likeButton, likeCounter) {
-  const isLiked = likeButton.classList.contains("card__like-button_is-active");
-  const method = isLiked ? removeLike : likeCard;
-
-  method(cardData._id)
-    .then((updatedCard) => {
-      likeButton.classList.toggle("card__like-button_is-active", !isLiked);
-      likeCounter.textContent = updatedCard.likes.length;
-    })
-    .catch((err) => {
-      console.error("Ошибка при обновлении лайка:", err);
-    });
-}
-
-function removeCard(cardId, cardElement) {
-  deleteCard(cardId)
-    .then(() => {
-      cardElement.remove();
-    })
-    .catch((err) => {
-      console.error("Ошибка при удалении карточки:", err);
     });
 }
 
@@ -211,7 +195,6 @@ Promise.all([getProfileInfo(), getInitialCards()])
     profileImage.style.backgroundImage = `url(${userData.avatar})`;
 
     const cardElements = createCardList(
-      cards.reverse(),
       templateCardNode,
       removeCard,
       likeButtonClick,

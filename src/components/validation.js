@@ -15,7 +15,7 @@ function hideInputError(formElement, inputElement, config) {
 function checkInputValidity(formElement, inputElement, config) {
   if (!inputElement.validity.valid) {
     if (inputElement.validity.patternMismatch) {
-      const errorMessage = inputElement.dataset.errorMessage || "Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы";
+      const errorMessage = inputElement.dataset.errorMessage;
       showInputError(formElement, inputElement, config, errorMessage);
     } else {
       showInputError(
@@ -72,7 +72,6 @@ export function clearValidation (formElement, config) {
     const buttonElement = formElement.querySelector(config.submitButtonSelector);
     inputList.forEach((inputElement) => {
         hideInputError(formElement, inputElement, config);
-        inputElement.textContent = '';
     })
     disableButton(buttonElement, config);
 }
