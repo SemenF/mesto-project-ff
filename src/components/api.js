@@ -82,7 +82,7 @@ export const deleteCard = (cardId) => {
     })
 };
 
-export const likeCard = (cardId) => {
+export const putLikeCard = (cardId) => {
     return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: config.headers,
@@ -110,12 +110,12 @@ export const removeLike = (cardId) => {
     })
 };
 
-export const changeProfileImage = (newProfileImage) => {
+export const changeProfileImage = (avatar) => {
     return fetch(`${config.baseUrl}/users/me/avatar`, {
         method: 'PATCH',
         headers: config.headers,
         body: JSON.stringify({
-            avatar: newProfileImage.avatar
+            avatar,
         })
     })
     .then((res) => {
