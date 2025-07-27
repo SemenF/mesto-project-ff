@@ -17,13 +17,13 @@ export function createCard(cardData, { removeCard, likeCard, openImagePopup, cur
   likeCounter.textContent = cardData.likes.length;
 
 if (cardData.owner && cardData.owner._id === currentUserId) {
-  deleteButton.classList.add('card__delete-button_active');
+  deleteButton.classList.add('card__delete-button_is-active');
   deleteButton.addEventListener("click", () => removeCard(cardData._id, clonedTemplate));
 } else {
   deleteButton.remove();
 }
 if (Array.isArray(cardData.likes) && cardData.likes.some(user => user._id === currentUserId)) {
-  likeButton.classList.add('card__like-button_active');
+  likeButton.classList.add('card__like-button_is-active');
 } 
 
 likeButton.addEventListener("click", () => likeCard(likeButton, cardData, likeCounter));
@@ -35,10 +35,10 @@ return clonedTemplate;
 export function likeCard(likeButton, cardData, likeCounter) {
   const cardId = cardData._id;
 
-  if (!likeButton.classList.contains('card__like-button_active')) {
+  if (!likeButton.classList.contains('card__like-button_is-active')) {
     putLikeCard(cardId)
       .then(updatedCard => {
-        likeButton.classList.add('card__like-button_active');
+        likeButton.classList.add('card__like-button_is-active');
         likeCounter.textContent = updatedCard.likes.length;
         // Обновляем локальные данные карточки, если нужно
         cardData.likes = updatedCard.likes;
@@ -49,7 +49,7 @@ export function likeCard(likeButton, cardData, likeCounter) {
   } else {
     removeLike(cardId)
       .then(updatedCard => {
-        likeButton.classList.remove('card__like-button_active');
+        likeButton.classList.remove('card__like-button_is-active');
         likeCounter.textContent = updatedCard.likes.length;
         cardData.likes = updatedCard.likes;
       })
